@@ -1,6 +1,7 @@
 import { store, Product } from "../flux/Store";
 import { ProductActions } from "../flux/Actions";
 import getProducts from "../services/miTiendaApi";
+
 class Section extends HTMLElement{
     constructor(){
         super()
@@ -53,7 +54,7 @@ class Section extends HTMLElement{
             <div>
                 <h1 class='titulo-principal'>Mi tiendita</h1>
             </div>
-            <ul id="product-list"></ul>
+            <div id="product-list"></div>
         </div>
             
        `;

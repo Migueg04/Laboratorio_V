@@ -1,5 +1,5 @@
 import { AppDispatcher, Action } from './Dispatcher';
-import { CounterActionTypes, loadStorageActionTypes, ProductActionTypes, UserActionTypes } from './Actions';
+import { loadStorageActionTypes, ProductActionTypes, } from './Actions';
 
 export type Product = {
     id: number;
