@@ -1,14 +1,22 @@
 import { AppDispatcher, Action } from './Dispatcher';
-import { CounterActionTypes, loadStorageActionTypes, UserActionTypes } from './Actions';
+import { CounterActionTypes, loadStorageActionTypes, ProductActionTypes, UserActionTypes } from './Actions';
 
-export type User = {
-    name: string;
-    age: number;
-}
+export type Product = {
+    id: number;
+    title: string;
+    price: number;
+    image: string;
+    description: string;
+};
+
+export type CartItem = {
+    product: Product;
+    id: number;
+};
 
 export type State = {
-    count: number;
-    user: User | null;
+    products: Product [];
+    cart: CartItem[];
 };
 
 type Listener = (state: State) => void;
@@ -16,9 +24,10 @@ type Listener = (state: State) => void;
 
 class Store {
     private _myState: State = {
-        count: 0,
-        user: null,
+        products: [],
+        cart: [],
     }
+    
     // Los componentes
     private _listeners: Listener[] = [];
 
@@ -32,43 +41,14 @@ class Store {
 
     _handleActions(action: Action): void {
         switch (action.type) {
-            case CounterActionTypes.INCREMENT_COUNT:
-                if (typeof action.payload === 'number') {
+            case ProductActionTypes.GET_PRODUCTS:
+                if(Array.isArray(action.payload)) {
                     this._myState = {
                         ...this._myState,
-                        count: this._myState.count + action.payload,
+                        products: action.payload as Product[],
                     }
                 }
                 this._emitChange();
-                break;
-
-            case CounterActionTypes.DECREMENT_COUNT:
-                if (typeof action.payload === 'number') {
-                    this._myState = {
-                        ...this._myState,
-                        count: this._myState.count - action.payload,
-                    }
-                }
-                this._emitChange();
-                break;
-
-            case UserActionTypes.SAVE_USER:
-                if (typeof action.payload === 'object') {
-                    this._myState = {
-                        ...this._myState,
-                        user: action.payload as User,
-                    }
-                }
-                this._emitChange();
-                break;
-
-            case loadStorageActionTypes.LOAD_STORAGE:
-                if (typeof action.payload === 'object'){
-                    this._myState = {
-                        ...this._myState,
-                        ...action.payload
-                    };
-                }    
                 break;
         }
         this.persist();

@@ -1,14 +1,20 @@
+import { store, Product } from "../flux/Store";
+import { ProductActions } from "../flux/Actions";
+import getProducts from "../services/miTiendaApi";
 class Section extends HTMLElement{
     constructor(){
         super()
         this.attachShadow({mode: "open"})
     }
 
-    connectedCallback(){
+    async connectedCallback(){
+        await ProductActions.getProducts();
+        //store.load();
         this.render();
     }
 
-    render(){
+    async render(){
+        
         this.shadowRoot!.innerHTML = `
         <style>
 
@@ -47,10 +53,20 @@ class Section extends HTMLElement{
             <div>
                 <h1 class='titulo-principal'>Mi tiendita</h1>
             </div>
-            <card-component></card-component>
+            <ul id="product-list"></ul>
         </div>
             
-       `
+       `;
+
+       const productList = this.shadowRoot?.querySelector("#product-list");
+       store.getState().products.forEach((product: Product) => {
+            const div = document.createElement("div");
+            div.innerHTML =  `
+                <product-card title="${product.title}" price="${product.price}" description="${product.description}" image="${product.image}"></product-card>
+            `;
+            productList?.appendChild(div);
+       })
+       
     }
 }
 export default Section
