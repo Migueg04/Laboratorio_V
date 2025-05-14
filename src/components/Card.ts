@@ -16,6 +16,7 @@ class Card extends HTMLElement{
 
     render(state= store.getState()){
         
+        const id = this.getAttribute("id")
         const title = this.getAttribute("title")
         const price = this.getAttribute("price")
         const description = this.getAttribute("description")
@@ -71,6 +72,8 @@ class Card extends HTMLElement{
                     <h2>${title}</h2>
                     <p>${description}</p>
                     <h3>$${price}</h3>
+                    <hr>
+                    <button-component id= "${id}" title="${title}" description="${description}" price="${price}" image="${image}"></button-component>
                 </div>     
             </div>
        `;

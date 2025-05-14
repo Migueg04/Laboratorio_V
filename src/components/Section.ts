@@ -9,8 +9,8 @@ class Section extends HTMLElement{
     }
 
     async connectedCallback(){
+        store.load();
         await ProductActions.getProducts();
-        //store.load();
         this.render();
     }
 
@@ -18,20 +18,17 @@ class Section extends HTMLElement{
         
         this.shadowRoot!.innerHTML = `
         <style>
-
-            .container{
-                background-color: rgb(217, 72, 72);
+            .container {
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                justify-content: center;   
-                width: 1200px;
-                flex-direction: column;          
+                width: 100%;
             }
 
             .titulo-principal {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 font-size: 50px;
-                color:rgb(0, 0, 0); /* amarillo dorado */
+                color: rgb(0, 0, 0);
                 text-align: center;
                 margin: 24px 0;
                 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -44,18 +41,43 @@ class Section extends HTMLElement{
                 display: block;
                 width: 800px;
                 height: 4px;
-                background-color:rgb(0, 0, 0);
+                background-color: rgb(0, 0, 0);
                 margin: 12px auto 0;
                 border-radius: 2px;
             }
-        
+
+            .content-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 32px;
+                max-width: 1200px;
+                width: 100%;
+                box-sizing: border-box;
+                padding: 20px;
+            }
+
+            #product-list {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                flex: 2;
+            }
+
+            cart-component {
+                flex: 1;
+                min-width: 300px;
+            }
         </style>
-         <div class="container">
-            <div>
-                <h1 class='titulo-principal'>Mi tiendita</h1>
+
+        <div class="container">
+            <h1 class="titulo-principal">Mi tiendita</h1>
+            <div class="content-wrapper">
+                <div id="product-list"></div>
+                <cart-component></cart-component>
             </div>
-            <div id="product-list"></div>
         </div>
+
             
        `;
 
@@ -63,7 +85,7 @@ class Section extends HTMLElement{
        store.getState().products.forEach((product: Product) => {
             const div = document.createElement("div");
             div.innerHTML =  `
-                <product-card title="${product.title}" price="${product.price}" description="${product.description}" image="${product.image}"></product-card>
+                <product-card id="${product.id}" title="${product.title}" price="${product.price}" description="${product.description}" image="${product.image}"></product-card>
             `;
             productList?.appendChild(div);
        })
